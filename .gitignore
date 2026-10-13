@@ -1,0 +1,12 @@
+casco_env/
+.venv/
+venv/
+datasetmodelloscelto/
+videotest/
+*.mp4
+*.avi
+*.mov
+__pycache__/
+*.py[cod]
+.DS_Store
+*.swp

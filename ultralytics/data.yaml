@@ -1,0 +1,13 @@
+# Percorso della cartella radice del dataset
+path: /home/tirocinante/DatasetPotenteAdjustedReduced/DatasetPotenteAdjustedReduced/  # Assicurati che questo percorso sia corretto
+
+# Percorsi relativi alla 'path' sopra
+train: train/images
+val: val/images
+test: test/images
+
+# Numero di classi
+nc: 2 # <-- MODIFICATO
+
+# Nomi delle classi (in ordine, classe 0 e poi classe 1)
+names: ['helmet', 'no helmet'] # <-- MODIFICATO
