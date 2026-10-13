@@ -1,70 +1,95 @@
-# HelmetDetection 
+#  HelmetDetection
 
-Progetto per il rilevamento automatico di caschi di sicurezza tramite modelli di deep learning (YOLO/Ultralytics).
+A deep learning project for automatic safety helmet detection using custom **YOLO / Ultralytics** models.
 
 ---
 
-## Struttura della cartella
+##  Directory Structure
 
-
+```text
 HelmetDetection/
 ├── AnnotationHelmet/
-│   └── casco_env/         # Ambiente virtuale Python
-├── datasetmodelloscelto/  # Dataset scelto per l’addestramento
-├── datasets/              # Altri dataset di supporto/test
-├── ultralytics/           # Framework YOLO + configurazioni
-├── videotest/             # Video per testare il modello
-└──helmet_detection_report.md          # File che contiene un sommario del progetto
+│   └── casco_env/              # Python virtual environment
+├── datasetmodelloscelto/       # Primary dataset selected for training
+├── datasets/                   # Additional support and testing datasets
+├── ultralytics/                # YOLO framework, custom modifications, and configs
+├── videotest/                  # Test videos for model inference
+└── helmet_detection_report.md  # Comprehensive project report and summary
+```
 
+- **`AnnotationHelmet/`**: Contains annotation tools and management scripts. It also houses the **`casco_env/`** virtual environment required to run training, inference, and utility scripts.
+- **`datasetmodelloscelto/`**: Contains the primary training dataset.
+- **`datasets/`**: Contains auxiliary datasets for validation and experimentation.
+- **`ultralytics/`**: Dedicated directory containing the customized **Ultralytics YOLO** framework, complete with modified modules and training configurations.
+- **`videotest/`**: Contains test footage used to evaluate detection quality in realistic scenarios.
+- **`helmet_detection_report.md`**: Detailed technical documentation covering model choices, loss curves, and comparative analysis.
+- **Inference Samples**: 2 sample output videos processed with **`best.pt`** (the optimal checkpoint from training run 21) are available for evaluation.
 
-- **AnnotationHelmet/**  
-  Contiene strumenti e script per la gestione delle annotazioni.  
-  All’interno si trova la cartella **"casco_env/"**, un ambiente virtuale Python necessario per eseguire training, predizioni o script vari.
-
-- **datasetmodelloscelto/**  
-  Contiene il **dataset scelto per l’addestramento** del modello.  
-
-- **datasets/**  
-  Contiene altri dataset di supporto o di test.
-
-- **ultralytics/**  
-  Directory dedicata al framework **Ultralytics YOLO**, con script e configurazioni per il training/prediction.
-
-- **videotest/**  
-  Contiene i video usati per testare il modello addestrato.
-- **helmet_detection_report/**
-  Contiene una descrizione completa sui modelli e sul progetto.
-  
-
-- Inoltre vi sono presenti 2 video inferenziati di esempio con il modello "best.pt" anch'esso presente , ovvero il corrispondente migliore del addestramento 21.
 ---
 
-##  Ambiente virtuale
+##  Virtual Environment
 
-Prima di eseguire qualsiasi comando (training, predizione o script Python), è obbligatorio attivare l’ambiente virtuale:
+Before running any script, training session, or inference task, activate the virtual environment:
 
 ```bash
 source AnnotationHelmet/casco_env/bin/activate
- ```
-per disattivarlo: ```bash deactivate   ```
-## Utilizzo
+```
 
-Per effettuare una predizione su immagini o video:
+To deactivate it:
 
-```bash yolo task=detect mode=predict model=runs/detect/train21-modelloscelto-/weights/best.pt source=../videotest/testv.mp4 project=runs/detect name=predict   ```
+```bash
+deactivate
+```
 
-train21-modelloscelto- può anche essere cambiato con gli altri modelli presente all'interno di runs/detect/ , così come può essere scelto il video o l'immagine su cui fare inferenza specificandone il percorso in source .
+---
 
-Per effettuare un training yolo: 
+##  Usage
 
-```bash yolo task=detect mode=train model=yolov11s.pt data=datasetmodelloscelto/data.yaml epochs=100 imgsz=640 ```
+> **Important:** All commands below should be executed from within the `ultralytics/` directory with the virtual environment (`casco_env`) active.
 
-model può variare in base al modello che si sceglie di usare in base alle esigenze dell'utente, così come può variare la grandezza delle immagini e il numero di epoche di addestramento con i parametri imgsz ed epochs seguendo la volontà dell'utente .(i modelli già scaricati e disponibili sono presenti nella cartella ultralytics.)
+```bash
+cd ultralytics
+```
 
-È consigliato usare il file data.yaml corretto per il dataset scelto, altrimenti YOLO non potrà avviare il training.
+### 1. Inference (Prediction on Images or Videos)
 
-Il comando desiderato va effettuato all'interno della cartella ultralytics con il virtual environment (casco_env) attivo per far si che funzioni.
+To perform object detection on an image or video file:
 
-è possibile inoltre osservare dati in merito al modello nella cartella runs/detect/train21(modelloscelto)/ , dove si trovano, immagini esplicative rappresentanti confusion matrix, boxplot , e file csv contententi le metriche di ogni epoca di training, oltre ad un file di configurazione args.yaml, per un'analisi più approfondita del modello e dei suoi parametri. 
+```bash
+yolo task=detect mode=predict \
+  model=runs/detect/train21-modelloscelto-/weights/best.pt \
+  source=../videotest/testv.mp4 \
+  project=runs/detect \
+  name=predict
+```
 
-Per osservare i risultati delle inferenze su video/immagini occorre andare nella cartella ultralytics/runs/detect/predictx dove vi sarà un file .avi corrispondente al video post-inferenza o un file .jpg corrispondente all'immagine post-inferenza
+- **Model selection:** You can replace `train21-modelloscelto-` with any other run folder located in `runs/detect/`.
+- **Source:** Set `source=` to any target image or video path.
+- **Outputs:** Annotated predictions with bounding boxes are saved automatically inside `ultralytics/runs/detect/predict*/` (as `.avi` for videos or `.jpg` for images).
+
+---
+
+### 2. Model Training
+
+To launch a new YOLO training pipeline:
+
+```bash
+yolo task=detect mode=train \
+  model=yolo11s.pt \
+  data=datasetmodelloscelto/data.yaml \
+  epochs=100 \
+  imgsz=640
+```
+
+- **`model`**: Select the starting architecture checkpoint (e.g., `yolo11s.pt`, located in the `ultralytics/` directory).
+- **`data`**: Path to the dataset configuration file (`data.yaml`). Ensure paths are correctly mapped.
+- **`epochs` & `imgsz`**: Customize training iterations and input resolution according to your hardware setup and requirements.
+
+---
+
+### 3. Evaluation & Metrics
+
+All metrics and artifact files for the primary model are stored inside `runs/detect/train21(modelloscelto)/`:
+- **Visual performance graphs:** Confusion matrices, box plots, F1-confidence curves, and precision-recall (PR) curves.
+- **Epoch logs:** `results.csv` tracking loss metrics, precision, recall, and mAP across epochs.
+- **Hyperparameter records:** `args.yaml` containing the complete training configuration.
