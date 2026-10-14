@@ -10,7 +10,11 @@ A deep learning project for automatic safety helmet detection using custom **YOL
 HelmetDetection/
 ├── AnnotationHelmet/
 │   └── casco_env/              # Python virtual environment
-├── helmet-detection-dataset/       # Primary dataset selected for training
+├── helmet-detection-dataset/   # Extracted dataset
+│   └── dataset10kadjusted/
+│       ├── train/
+│       ├── val/
+│       └── test/
 ├── datasets/                   # Additional support and testing datasets currently empty can be used for extra data for next releases
 ├── ultralytics/                # YOLO framework, custom logic, and configurations
 │   └── runs/detect/train21-modelloscelto/
@@ -93,7 +97,7 @@ To launch a new YOLO training pipeline:
 ```bash
 yolo task=detect mode=train \
   model=yolo11s.pt \
-  data=helmet-detection-dataset/data.yaml \
+  data=../helmet-detection-dataset/dataset10kadjusted/data.yaml \
   epochs=100 \
   imgsz=640
 ```
