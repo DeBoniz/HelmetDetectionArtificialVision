@@ -10,15 +10,18 @@ A deep learning project for automatic safety helmet detection using custom **YOL
 HelmetDetection/
 ├── AnnotationHelmet/
 │   └── casco_env/              # Python virtual environment
-├── datasetmodelloscelto/       # Primary dataset selected for training
-├── datasets/                   # Additional support and testing datasets
-├── ultralytics/                # YOLO framework, custom modifications, and configs
+├── helmet-detection-dataset/       # Primary dataset selected for training
+├── datasets/                   # Additional support and testing datasets currently empty can be used for extra data for next releases
+├── ultralytics/                # YOLO framework, custom logic, and configurations
+│   └── runs/detect/train21-modelloscelto/
+│       └── weights/
+│           └── best.pt         # Best-performing trained weights (Model 21)
 ├── videotest/                  # Test videos for model inference
 └── helmet_detection_report.md  # Comprehensive project report and summary
 ```
 
 - **`AnnotationHelmet/`**: Contains annotation tools and management scripts. It also houses the **`casco_env/`** virtual environment required to run training, inference, and utility scripts.
-- **`datasetmodelloscelto/`**: Contains the primary training dataset.
+- **`helmet-detection-dataset/`**: Contains the primary training dataset.
 - **`datasets/`**: Contains auxiliary datasets for validation and experimentation.
 - **`ultralytics/`**: Dedicated directory containing the customized **Ultralytics YOLO** framework, complete with modified modules and training configurations.
 - **`videotest/`**: Contains test footage used to evaluate detection quality in realistic scenarios.
@@ -42,6 +45,20 @@ deactivate
 ```
 
 ---
+##  Dataset Setup (Hugging Face)
+To keep the repository fast to clone, the dataset (18,159 images in YOLO format) is hosted on Hugging Face as helmet-detection-dataset.zip:
+
+- **`Dataset Repository: huggingface.co/datasets/DeBoniz/helmet-detection-dataset`
+
+To download and extract it directly into your project root:
+```bash
+# Download the dataset from Hugging Face
+curl -L -o helmet-detection-dataset.zip "[https://huggingface.co/datasets/DeBoniz/helmet-detection-dataset/resolve/main/helmet-detection-dataset.zip](https://huggingface.co/datasets/DeBoniz/helmet-detection-dataset/resolve/main/helmet-detection-dataset.zip)"
+
+# Unzip into the dataset folder
+unzip -q helmet-detection-dataset.zip -d .
+
+```
 
 ##  Usage
 
@@ -76,7 +93,7 @@ To launch a new YOLO training pipeline:
 ```bash
 yolo task=detect mode=train \
   model=yolo11s.pt \
-  data=datasetmodelloscelto/data.yaml \
+  data=helmet-detection-dataset/data.yaml \
   epochs=100 \
   imgsz=640
 ```
